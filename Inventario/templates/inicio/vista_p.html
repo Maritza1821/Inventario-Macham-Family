@@ -1,0 +1,217 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <title> {% block titulo %} Inicio{% endblock titulo %}</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="Shortcut Icon" type="image/x-icon" href="/static/vista_principal/assets/icons/book.ico" />
+    <script src="/static/vista_principal/js/sweet-alert.min.js"></script>
+    <link rel="stylesheet" href="/static/vista_principal/css/sweet-alert.css">
+    <link rel="stylesheet" href="/static/vista_principal/css/material-design-iconic-font.min.css">
+    <link rel="stylesheet" href="/static/vista_principal/css/normalize.css">
+    <link rel="stylesheet" href="/static/vista_principal/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/vista_principal/css/jquery.mCustomScrollbar.css">
+    <link rel="stylesheet" href="/static/vista_principal/css/style.css">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+
+    <script src="/static/vista_principal/js/modernizr.js"></script>
+    <script src="/static/vista_principal/js/bootstrap.min.js"></script>
+    <script src="/static/vista_principal/js/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script src="/static/vista_principal/js/main.js"></script>
+    
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.25/datatables.min.css"/>
+
+</head>
+<body>
+     <div class="navbar-lateral full-reset">
+
+        <div class="visible-xs font-movile-menu mobile-menu-button"></div>
+        <div class="full-reset container-menu-movile nav-lateral-scroll">
+            <div class="logo full-reset all-tittles">
+                <i class="visible-xs zmdi zmdi-close pull-left mobile-menu-button" style="line-height: 55px; cursor: pointer; padding: 0 10px; margin-left: 7px;"></i> 
+                sistema de inventario
+            </div>
+            <div class="nav-lateral-divider full-reset"></div>
+            <div class="full-reset" style="padding: 10px 0; color:#fff;">
+                <p >
+                    <img src="/static/imagenes/login1.jpg" class="img-responsive img-circle center-box"  width="120px" height="100px"  alt="Biblioteca"  >
+                </p>
+                <p class="text-center" style="padding-top: 15px;"> MachamFamily</p>
+            </div>
+            <div class="nav-lateral-divider full-reset"></div>
+            <div class="full-reset nav-lateral-list-menu">
+                <ul class="list-unstyled">
+                    <li><a href="{% url 'vista_inicio' %}"><i class="zmdi zmdi-home zmdi-hc-fw"></i>&nbsp;&nbsp; Inicio</a></li>
+                    <li>
+                        <div class="dropdown-menu-button"><i class="zmdi zmdi-case zmdi-hc-fw"></i>&nbsp;&nbsp; Administración <i class="zmdi zmdi-chevron-down pull-right zmdi-hc-fw icon-sub-menu"></i></div>
+                        <ul class="list-unstyled">
+                            <li><a href=""><i class="zmdi zmdi-balance zmdi-hc-fw"></i>&nbsp;&nbsp; Usuarios</a></li>
+                            <li><a href=""><i class="zmdi zmdi-truck zmdi-hc-fw"></i>&nbsp;&nbsp; Roles</a></li>
+                           
+                        </ul>
+                    </li>
+                    <li>
+                        <div class="dropdown-menu-button"><i class="zmdi zmdi-account-add zmdi-hc-fw"></i>&nbsp;&nbsp; Almacen <i class="zmdi zmdi-chevron-down pull-right zmdi-hc-fw icon-sub-menu"></i></div>
+                        <ul class="list-unstyled">
+                            <li><a href="{% url 'listar_cliente' %}"><i class="zmdi zmdi-face zmdi-hc-fw"></i>&nbsp;&nbsp; Clientes </a></li>
+                            <li><a href="{% url 'listar_proveedor' %}"><i class="zmdi zmdi-male-alt zmdi-hc-fw"></i>&nbsp;&nbsp; Proveedores</a></li>
+                            <li><a href=""><i class="zmdi zmdi-accounts zmdi-hc-fw"></i>&nbsp;&nbsp; Stock</a></li>
+                            <li><a href="{% url 'listar_compra' %}"><i class="zmdi zmdi-male-female zmdi-hc-fw"></i>&nbsp;&nbsp; Compras</a></li>
+                            
+                       
+                            <li><a href=""><i class="zmdi zmdi-male-female zmdi-hc-fw"></i>&nbsp;&nbsp; Pedidos</a></li>
+                            <div class="dropdown-menu-button"><i class="zmdi zmdi-account-add zmdi-hc-fw"></i>&nbsp;&nbsp; Ventas <i class="zmdi zmdi-chevron-down pull-right zmdi-hc-fw icon-sub-menu"></i></div>
+                            <ul class="list-unstyled">
+                                <li><a href=""><i class="zmdi zmdi-face zmdi-hc-fw"></i>&nbsp;&nbsp; Pagos </a></li>
+                                <li><a href=""><i class="zmdi zmdi-face zmdi-hc-fw"></i>&nbsp;&nbsp; Cotización </a></li>
+
+                            </ul>
+                        </ul>
+                    </li> 
+                </ul>   
+            </div>  
+             
+        </div>
+    </div>
+    <div class="content-page-container full-reset custom-scroll-containers">
+        <nav class="navbar-user-top full-reset">
+            <ul class="list-unstyled full-reset">
+                <figure>
+                   <img src="/static/vista_principal/assets/img/user01.png" alt="user-picture" class="img-responsive img-circle center-box">
+                </figure>
+                <li style="color:#fff; cursor:default;">
+                    <span class="all-tittles">{{user.username | upper }} </span>
+                </li>
+                <li  class="tooltips-general exit-system-button" data-href="{% url 'vista_logout' %}" data-placement="bottom" title="Salir del sistema">
+                    <i class="zmdi zmdi-power"></i>
+                </li>
+                
+                <li class="mobile-menu-button visible-xs" style="float: left !important;">
+                    <i class="zmdi zmdi-menu"></i>
+                </li>
+                <li class="desktop-menu-button hidden-xs" style="float: left !important;">
+                    <i class="zmdi zmdi-swap"></i>
+                </li>
+            </ul>
+        </nav>
+
+            <br>
+            {% block body %}
+            <div class="page-header">
+              <h1 class="all-tittles">Sistema bibliotecario <small>Inicio</small></h1>
+            </div>
+        </div>
+        <section class="full-reset text-center" style="padding: 40px 0;">
+            <article class="tile">
+                <div class="tile-icon full-reset"><i class="zmdi zmdi-face"></i></div>
+                <div class="tile-name all-tittles">administradores</div>
+                <div class="tile-num full-reset">7</div>
+            </article>
+            <article class="tile">
+                <div class="tile-icon full-reset"><i class="zmdi zmdi-accounts"></i></div>
+                <div class="tile-name all-tittles">estudiantes</div>
+                <div class="tile-num full-reset">70</div>
+            </article>
+            <article class="tile">
+                <div class="tile-icon full-reset"><i class="zmdi zmdi-male-alt"></i></div>
+                <div class="tile-name all-tittles">docentes</div>
+                <div class="tile-num full-reset">11</div>
+            </article>
+            <article class="tile">
+                <div class="tile-icon full-reset"><i class="zmdi zmdi-male-female"></i></div>
+                <div class="tile-name all-tittles" style="width: 90%;">personal administrativo</div>
+                <div class="tile-num full-reset">17</div>
+            </article>
+            <article class="tile">
+                <div class="tile-icon full-reset"><i class="zmdi zmdi-truck"></i></div>
+                <div class="tile-name all-tittles">proveedores</div>
+                <div class="tile-num full-reset">21</div>
+            </article>
+            <article class="tile">
+                <div class="tile-icon full-reset"><i class="zmdi zmdi-book"></i></div>
+                <div class="tile-name all-tittles">libros</div>
+                <div class="tile-num full-reset">77</div>
+            </article>
+            <article class="tile">
+                <div class="tile-icon full-reset"><i class="zmdi zmdi-bookmark-outline"></i></div>
+                <div class="tile-name all-tittles">categorías</div>
+                <div class="tile-num full-reset">11</div>
+            </article>
+            <article class="tile">
+                <div class="tile-icon full-reset"><i class="zmdi zmdi-assignment-account"></i></div>
+                <div class="tile-name all-tittles">secciones</div>
+                <div class="tile-num full-reset">17</div>
+            </article>
+            <article class="tile">
+                <div class="tile-icon full-reset"><i class="zmdi zmdi-timer"></i></div>
+                <div class="tile-name all-tittles">reservaciones</div>
+                <div class="tile-num full-reset">10</div>
+            </article>
+            <article class="tile">
+                <div class="tile-icon full-reset"><i class="zmdi zmdi-time-restore"></i></div>
+                <div class="tile-name all-tittles" style="width: 90%;">devoluciones pendientes</div>
+                <div class="tile-num full-reset">9</div>
+            </article>
+            <article class="tile">
+                <div class="tile-icon full-reset"><i class="zmdi zmdi-calendar"></i></div>
+                <div class="tile-name all-tittles">préstamos</div>
+                <div class="tile-num full-reset">7</div>
+            </article>
+            <article class="tile">
+                <div class="tile-icon full-reset"><i class="zmdi zmdi-trending-up"></i></div>
+                <div class="tile-name all-tittles" style="width: 90%;">reportes y estadísticas</div>
+                <div class="tile-num full-reset">&nbsp;</div>
+            </article>
+        </section>
+        
+        <div class="modal fade" tabindex="-1" role="dialog" id="ModalHelp">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title text-center all-tittles">ayuda del sistema</h4>
+                </div>
+                <div class="modal-body">
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore dignissimos qui molestias ipsum officiis unde aliquid consequatur, accusamus delectus asperiores sunt. Quibusdam veniam ipsa accusamus error. Animi mollitia corporis iusto.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="zmdi zmdi-thumb-up"></i> &nbsp; De acuerdo</button>
+                </div>
+            </div>
+          </div>
+          {% endblock body %}
+        </div>
+    </div>
+
+</body>
+
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.25/datatables.min.js"></script>
+<script>
+    $(document).ready( function () {
+        $('#datatable').DataTable( {
+          "aLengthMenu": [[5, 10, 15, -1], [5, 10, 15, "All"]],
+          "language": {
+            "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json",
+            "lengthMenu": "Mostrar MENU ",
+            "zeroRecords": "Registro no encontrado",
+            "info": "Mostrando página PAGE de PAGES",
+            "infoEmpty": "No hay registros disponibles",
+            "infoFiltered": "(filtered from MAX registros totales)",
+            "pagingType": "full_numbers",
+            "search": "Buscar:",            
+          }
+      } );
+    } );
+</script>
+
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@2.2.4/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.4/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-match-height@0.7.2/dist/jquery.matchHeight.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.25/datatables.min.js"></script>
+
+</html>

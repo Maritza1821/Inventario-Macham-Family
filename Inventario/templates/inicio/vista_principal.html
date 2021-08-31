@@ -1,0 +1,194 @@
+{% load static %}
+<!Doctype html>
+<html class="no-js" lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{% block titulo %}MACHAM FAMILY{% endblock titulo %}</title>
+    <meta name="description" content="Ela Admin - HTML5 Admin Template">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.25/datatables.min.css"/>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="{% static 'lib/adminlte-3.0.4/plugins/font-awesome-5.11.1/css/all.min.css' %}">
+    
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.0/normalize.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lykmapipo/themify-icons@0.1.2/css/themify-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pixeden-stroke-7-icon@1.2.3/pe-icon-7-stroke/dist/pe-icon-7-stroke.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.2.0/css/flag-icon.min.css">
+    <link rel="stylesheet" href="{% static 'css/cs-skin-elastic.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% block extra_css %}
+    {% endblock extra_css %}
+</head>
+<body>
+    <!-- Left Panel -->
+    <aside id="left-panel" class="left-panel">
+        <nav class="navbar navbar-expand-sm navbar-default">
+            <div id="main-menu" class="main-menu">
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <a href="{% url 'listar_categoria' %}"><i class="menu-icon fa fa-users"></i>Inicio</a>
+                    </li>
+                    {% if request.user.is_staff %}
+                    <li class="menu-item-has-children dropdown">
+                        <a href="" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i
+                            class="menu-icon fa fa-th-list"></i>Categoria</a>
+                        <ul class="sub-menu children dropdown-menu">
+                            <li><i class="menu-icon fa fa-th-list"></i><a href="{% url 'listar_categoria' %}">Lista Categoria</a></li>                            
+                        </ul>
+                    </li>
+                    {% endif %}
+                    <li class="menu-item-has-children dropdown">
+                       <a href="" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class=" menu-icon fas fa-user"></i>Ventas</a>
+                       <ul class="sub-menu children dropdown-menu">
+                           <li><i class="menu-icon fa fa-users"></i><a href="{% url 'listar_venta' %}">Lista de Ventas </a></li>
+                       </ul>
+                    </li>
+                    <li class="menu-item-has-children dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-th-list"></i>Compras</a>
+                        <ul class="sub-menu children dropdown-menu">
+                            <li><i class="menu-icon fa fa-th-list"></i><a href="{% url 'listar_compra' %}">Lista de Compras</a></li>
+                        </ul>
+                    </li>
+                    <li class="menu-item-has-children dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-th-list"></i>Stock</a>
+                        <ul class="sub-menu children dropdown-menu">
+                            <li><i class=" menu-icon fa fa-th-list"></i><a href="{% url 'listar_producto' %}">Lista de Productos </a></li>
+                        </ul>
+                    </li>
+                    <li class="menu-item-has-children dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fas fa-user-md"></i>Clientes</a>
+                        <ul class="sub-menu children dropdown-menu">
+                            <li><i class=" menu-icon fa fa-th-list"></i><a href="{% url 'listar_cliente' %}">Lista de Clientes </a></li>
+                        </ul>
+                    </li>
+
+                <li class="menu-item-has-children dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fas fa-user-md"></i>Proveedores</a>
+                    <ul class="sub-menu children dropdown-menu">
+                        <li><i class=" menu-icon fa fa-th-list"></i><a href="{% url 'listar_proveedor' %}">Lista de Proveedores </a></li>
+                    </ul>
+                </li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </nav> 
+    </aside>
+    <!-- /#left-panel -->
+    <!-- Right Panel -->
+    <div id="right-panel" class="right-panel">
+        <!-- Header-->
+        <header id="header" class="header">
+            <div class="top-left">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="./"><img width="70px" height="50px" src="{% static 'imagenes/login1.jpg' %}" alt="Logo"> </a>
+                    <a class="navbar-brand hidden" href="./"><img src="{% static 'imagenes/login1.jpg' %}" alt="Logo"></a>
+                    <a id="menuToggle" class="menutoggle"><i class="fa fa-bars"></i></a>
+                </div>
+            </div>
+            <div class="top-right">
+                <div class="header-menu">
+                    <div class="user-area dropdown float-right">
+                        <a href="#" class="dropdown-toggle active" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            {% if user.is_authenticated %}
+                            Usuario: <b>{{ user | upper }}</b>
+                            {% endif %}
+                            <img class="user-avatar rounded-circle" src="{% static 'imagenes/Maritza.jfif' %}" alt="User Avatar">
+                        </a>
+                        <div class="user-menu dropdown-menu">
+                            <a class="nav-link" href="#"><i class="fa fa- user"></i>Perfil</a>
+                            <a class="nav-link" href="#"><i class="fa fa -cog"></i>Administración</a>
+                            <a class="nav-link" href="{% url 'vista_logout' %}"><i class="fa fa-power -off"></i>Salir</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </header>
+
+        <div class="content">
+            <div>
+                <div class="row">
+                    <div class="col-lg-12">
+                      {% block body %}
+                        <div class="col-md-12 prueba">
+                            <div class="card bg-primary">
+                                <div class="card-body">
+                                    <blockquote class="blockquote mb-0 text-light text-center">
+                                        <h1 class="text-light">{{ user.username | upper }} BIENVENIDO A MACHAM FAMILY MUEBLES CONFORT</h1>
+                                        <footer class="blockquote-footer text-light">"Tu Diseño y" -<cite title="Neil Gaiman">Elección</cite></footer>
+                                    </blockquote>
+                                </div>
+                            </div>
+                        </div>
+                      {% endblock body %}
+                </div>
+            </div>
+        </div>
+        <!-- /.content -->
+        <div class="clearfix"></div>
+        <!-- Footer -->
+        <footer class="site-footer">
+            <div class="footer-inner bg-white">
+                <div class="row">
+                    <div class="col-sm-6">
+                        Copyright &copy; Admin
+                    </div>
+                    <div class="col-sm-6 text-right">
+                        Designed by <a href="#">Django 3.0</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- /.site-footer -->
+    </div>
+    <!-- /#right-panel -->
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@2.2.4/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.4/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-match-height@0.7.2/dist/jquery.matchHeight.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.25/datatables.min.js"></script>
+    <script>
+        $(document).ready( function () {
+            $('#datatable').DataTable( {
+              "aLengthMenu": [[5, 10, 15, -1], [5, 10, 15, "All"]],
+              "language": {
+                "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json",
+                "lengthMenu": "Mostrar MENU ",
+                "zeroRecords": "Registro no encontrado",
+                "info": "Mostrando página PAGE de PAGES",
+                "infoEmpty": "No hay registros disponibles",
+                "infoFiltered": "(filtered from MAX registros totales)",
+                "pagingType": "full_numbers",
+                "search": "Buscar:",            
+              }
+          } );
+        } );
+    </script>
+    <script src="{% static 'js/main.js' %}"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    
+{% if messages %}
+{% for m in messages %}
+<script>
+    Swal.fire({
+        position: 'top-center',
+  icon: 'success',
+  title: '{{m}}"',
+  showConfirmButton: false,
+  timer: 1500
+
+    })
+</script>
+
+{% endfor %}
+{% endif %}
+
+    {% block extrajs %}
+    {% endblock extrajs %}
+</body>
+</html>

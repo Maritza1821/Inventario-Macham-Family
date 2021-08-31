@@ -1,0 +1,65 @@
+<div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+        <h2 class="modal-header ">Detalles Venta</h2>
+        <button class="close" type="button" data-dismiss="modal" aria-label="close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <form action="{% url 'editar_venta' object.id %}" method="POST">
+            {% csrf_token %}
+            <div class="modal-body">
+                {{ form.as_p }}
+<br/>
+                 <table class="table table-hover " id="queryTable">
+  <thead>
+  <h4>Lista de productos</h4>
+    <tr>
+      <th>Cantidad</th>
+      <th>Descripcion</th>
+      <th>Total</th>
+
+    </tr>
+  </thead>
+  <tbody id="bodytabla">
+   
+  </tbody>
+</table>
+            </div>
+            
+            <div class="modal-footer">              
+                <button class="btn btn-danger" type="button" data-dismiss="modal">Cerrar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+     {% block extrajs %}
+<script type="text/javascript">
+      var url=$("form").attr("action")
+            let pat=url.substring((url.length-3),(url.length-1))
+            console.log(pat)
+    
+async function cargar(){
+ let responsePro = await fetch('http://127.0.0.1:8000/api/detallesventaalter/?fk_venta=' + pat)
+        responsePro = await responsePro.json()
+        console.log(responsePro)
+        let lista=[]
+        responsePro.map(item=>{
+            lista.push(
+                ` <th>${item.cantidad}</th>
+      <th>${item.fk_producto}</th>
+      <th>${item.total}</th>
+     
+
+    </tr>`
+            )
+        })
+     
+     
+     $("#bodytabla").append(lista)
+}
+        cargar()
+
+</script>
+
+{% endblock extrajs %}

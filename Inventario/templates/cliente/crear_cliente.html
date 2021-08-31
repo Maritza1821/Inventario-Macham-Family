@@ -1,0 +1,79 @@
+<div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+        <h2 class="modal-header ">Crear Cliente</h2>
+        <button class="close" type="button" data-dismiss="modal" aria-label="close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <form action="{% url 'crear_cliente' %}" method="POST">
+            {% csrf_token %}
+            <div class="modal-body">
+                {{ form.as_p }}
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" type="submit">Confirmar</button>
+                <button class="btn btn-danger" type="button" data-dismiss="modal">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<script>
+       
+    $(function(){
+        function messageError(text){
+            Swal.fire({
+            title:'ERRROR',
+            html: '<pre style="text-align: initial !important;">' + text + '</pre>',
+            icon:'error',
+            confirmButtonColor:'#d33',
+            confirmButtonText:'Aceptar'
+        })}
+        var url=$("form").attr("action")
+        var token=$("[name=csrfmiddlewaretoken]").val()
+
+        $("form").submit(function(e){
+            e.preventDefault()
+            let formdata=$("form").serializeArray()
+            console.log(formdata)
+            $.ajax({
+                method: "POST",
+                url: url,
+                data: formdata,
+                headers:{'X-CSRFToken':token},
+                }).done(function(r,textStatus,xhr){
+                    console.log(r)
+                    console.log(textStatus)
+                    console.log(xhr)
+                if(xhr.status==200){
+                    location.reload(true);
+                }else{
+                    console.log("text",textStatus)
+                    messageError(textStatus);
+                }
+               
+            }).fail(function(error){               
+                let ar=JSON.parse(error.responseText)              
+                console.log(ar)               
+                let obe = Object.values(ar);
+             
+                let mensaje=""
+                for (var k in obe) {
+                    if ((Number(k) + 1) === obe.length) {
+                        mensaje+="- "+obe[k][0]
+                    }else{
+                    mensaje+= "- "+obe[k][0]+"\n"
+
+                    }
+                    
+                }
+                
+               
+                 messageError(mensaje)
+                
+            });
+        })
+    })
+
+     
+</script>

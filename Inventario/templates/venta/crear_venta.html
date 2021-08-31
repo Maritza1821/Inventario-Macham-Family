@@ -1,0 +1,328 @@
+{% extends 'inicio/inicio.html' %}
+{% block titulo %}Lista Ventas{% endblock titulo %}
+{% block body %}
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js"></script>   
+<div class="ventas">
+    <div class="productos" style="padding:12px">
+  
+         
+                <div class="ui-widget">
+            <label for="search"> Buscar productos </label>
+             <input id="countryId" type="text" name="fname">
+            </div>
+         <div>
+         <div class="resultado" id="resultado">
+        
+         </div>
+       <table class="table table-hover " id="queryTable">
+  <thead>
+  <h4>Lista de productos</h4>
+    <tr>
+      <th>Cantidad</th>
+      <th>Descripcion</th>
+      <th>Total</th>
+
+    </tr>
+  </thead>
+  <tbody id="bodytabla">
+   
+  </tbody>
+</table>
+         </div>
+            
+          
+           
+    </div>
+       <form action="{% url 'crear_venta' %}" method="POST" class="formulario">
+          {% csrf_token %}
+    <div class="">
+     {{form.as_p  }}
+      <div class="modal-footer">
+                <button class="btn btn-primary" type="submit">Guardar</button>
+                <button class="btn btn-danger" type="button" data-dismiss="modal">Cancelar</button>
+            </div>
+    </div>
+        </form>
+  
+</div>
+{% endblock body %}
+
+<script type="text/javascript">
+
+</script>
+{% block extrajs %}
+<script type="text/javascript">
+ let listaP=[]
+
+
+ function makeid(length) {
+    var result           = '';
+    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < length; i++ ) {
+      result += characters.charAt(Math.floor(Math.random() * 
+ charactersLength));
+   }
+   return result;
+}
+      
+
+          function remove(id,total){
+              let nueva=listaP.filter(item=>item.id!=id)
+              listaP=nueva;
+              $("#"+id).remove()
+              let subtotal=Number((Number(total) / 1.12).toFixed(2))
+     let iva=Number((Number(total)-Number(subtotal)).toFixed(2))
+     let totalF=$("#total").val()
+     let subtotalF=$("#subtotal").val()
+     let ivaF=$("#iva").val()
+     let nuevoTotal=Number(totalF)-Number(total)
+     let nuevosubtotal=Number(subtotalF)-Number(subtotal)
+     let nuevoiva=Number(ivaF)-Number(iva)
+
+     $("#total").val(nuevoTotal)
+     $("#subtotal").val(nuevosubtotal)
+     $("#iva").val(nuevoiva)
+        }
+
+        
+      function agregarDato(precio,id,nombre){
+        
+         
+          Swal.fire({
+  title: 'Cantidad de productos',
+  input: 'number',
+  inputAttributes: {
+    autocapitalize: 'off'
+  },
+  showCancelButton: true,
+  confirmButtonText: 'Agregar Producto',
+  showLoaderOnConfirm: true, 
+  preConfirm: (login) => {
+      if(login>0){
+
+      }else{
+           Swal.showValidationMessage(
+          "Debe ingresar una cantidad mayor a 0"
+        )
+      }
+   
+  },
+  allowOutsideClick: () => !Swal.isLoading()
+}).then((result) => {
+  if (result.isConfirmed) {
+      console.log(result)
+    Swal.fire({
+      title: `Se agregaron ${result.value} ${nombre}`,
+     
+    })
+    var random_number = makeid(9);
+    let total=(Number(result.value) * Number(precio))
+
+    let ele=`
+                 <tr id="${random_number}">
+      
+      <th>${result.value}</th>
+      <th>${nombre}</th>
+      <th>${total}</th>
+      <th>
+      <button onclick='remove(${random_number},${total})'>Eliminar</button>
+      </th>
+
+    </tr>`
+       $("#priductos ").remove()
+     $("#bodytabla").append(ele)
+      
+     let subtotal=Number((Number(total) / 1.12).toFixed(2))
+     let iva=Number((Number(total)-Number(subtotal)).toFixed(2))
+     let totalF=$("#total").val()
+     let subtotalF=$("#subtotal").val()
+     let ivaF=$("#iva").val()
+     let nuevoTotal=Number(totalF)+Number(total)
+     let nuevosubtotal=Number(subtotalF)+Number(subtotal)
+     let nuevoiva=Number(ivaF)+Number(iva)
+
+     $("#total").val(nuevoTotal)
+     $("#subtotal").val(nuevosubtotal)
+     $("#iva").val(nuevoiva)
+     listaP.push({
+         "id":random_number,
+          "fk_producto":id,
+"cantidad":result.value,
+"subtotal":subtotal,
+"iva":iva,
+"total":total,
+     })
+    }
+  
+})
+      }
+      
+  $(document).ready(function () {
+     
+
+      
+    $("#countryId").on('keyup',async function () {
+        console.log("dsanfk")
+        var search = $('#countryId').val();
+        console
+       let responsePro = await fetch('http://127.0.0.1:8000/api/producto/?nombre=' + search)
+        responsePro = await responsePro.json()
+        console.log(responsePro)
+        if(search.length ===0){
+            console.log("rento perra")
+        $("#priductos ").remove()
+        }else{
+
+      
+        if(responsePro.length>0){
+        
+              let tablarender=`
+         <table class="table table-hover " id="priductos">
+  <thead>
+    <tr>
+     
+      <th>Descripcion</th>
+      <th>Precio</th> 
+      <th>Acciones</th> 
+
+    </tr>
+  </thead>
+  <tbody>
+    ${
+         responsePro.map(item=>{
+           
+                return `
+                 <tr>
+      
+      <th>${item.nombre}</th>
+      <th>${item.precio}</th>
+      <th>
+      <button onclick='agregarDato(${item.precio},${item.id},"${item.nombre}")'>Agregar</button>
+      </th>
+
+    </tr>`
+            })
+    }
+    
+  </tbody>
+</table>
+        `
+
+        $("#priductos ").remove()
+        $("#resultado").append(tablarender)
+        }else{
+             $("#priductos ").remove()
+       
+        }
+        }
+    });
+
+
+
+       function messageError(text){
+            Swal.fire({
+            title:'ERRROR',
+            html: '<pre style="text-align: initial !important;">' + text + '</pre>',
+            icon:'error',
+            confirmButtonColor:'#d33',
+            confirmButtonText:'Aceptar'
+        })}
+        var url=$("form").attr("action")
+        var token=$("[name=csrfmiddlewaretoken]").val()
+
+        $("form").submit(function(e){
+            e.preventDefault()
+            let formdata=$("form").serializeArray()
+            if(listaP.length ===0){
+                  messageError("Debe cargar productos a la venta")
+                  return;
+            }else{
+
+                 $.ajax({
+                method: "POST",
+                url: url,
+                data: formdata,
+                headers:{'X-CSRFToken':token},
+                }).done(async function(r,textStatus,xhr){
+                    console.log(r)
+                    console.log(textStatus)
+                    console.log(xhr)
+                if(xhr.status==200){
+                     let n_venta= $("#n_venta").val()
+                    let responseVenta = await fetch('http://127.0.0.1:8000/api/venta/?n_venta=' + n_venta)
+                    responseVenta = await responseVenta.json()
+                    let id_venta=responseVenta[0].id;
+                    let listaSave=listaP.filter(item=>{
+                        item.fk_venta=id_venta;
+                        item.fk_producto_id=item.fk_producto;
+                        return item;
+                    })
+                    console.log(listaSave)
+                    let resuls = await fetch("http://localhost:8000/api/detallesventa/", {
+                        method: "POST",
+                        credentials: "same-origin",
+                        headers: {
+                            "Accept": "application/json",
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(listaSave),
+                    })
+
+                    if (resuls.status === 400) {                   
+                        let mensajes = await resul.json()
+                        let values = Object.values(mensajes);
+                        let listaMensajes = values.filter((item) => {
+
+                            return item[0];
+                        })
+                         messageError(listaMensajes);
+                    } else if (resuls.status === 201) {
+                        let data = await resuls.json()
+                      
+                         location.href="/lista_venta"
+                    }
+                  //  location.reload(true);
+                }else{
+                    console.log("text",textStatus)
+                    messageError(textStatus);
+                }
+               
+            }).fail(function(error){               
+                let ar=JSON.parse(error.responseText)              
+                console.log(ar)               
+                let obe = Object.values(ar);
+             
+                let mensaje=""
+                for (var k in obe) {
+                    if ((Number(k) + 1) === obe.length) {
+                        mensaje+="- "+obe[k][0]
+                    }else{
+                    mensaje+= "- "+obe[k][0]+"\n"
+
+                    }
+                    
+                }
+                
+               
+                 messageError(mensaje)
+                
+            });
+               
+            }
+            let datosT=$("#bodytabla > tr")
+            console.log(datosT)
+
+            console.log(listaP);
+           
+        })
+});
+</script>
+
+{% endblock extrajs %}

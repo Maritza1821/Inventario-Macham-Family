@@ -1,0 +1,116 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Bootflat-Admin Template</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="shortcut icon" href="favicon_16.ico"/>
+    <link rel="bookmark" href="favicon_16.ico"/>
+    <!-- site css -->
+    <link rel="stylesheet" href="/static/inicio/dist/css/site.min.css">
+    <link rel="stylesheet" href="/static/css/main.css">
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,800,700,400italic,600italic,700italic,800italic,300italic" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.25/datatables.min.css"/>
+
+    <script type="text/javascript" src="/static/inicio/dist/js/site.min.js"></script>
+ 
+  </head>
+  <body>
+    <!--nav-->
+    <nav role="navigation" class="navbar navbar-custom">
+        <div class="container-fluid">
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <div class="navbar-header">
+            <button data-target="#bs-content-row-navbar-collapse-5" data-toggle="collapse" class="navbar-toggle" type="button">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <h5 class="centered" style="color:white;margin-left:24px">Usuario: {{ user.username | upper }}</h5>
+          </div>
+
+          <!-- Collect the nav links, forms, and other content for toggling -->
+          <div id="bs-content-row-navbar-collapse-5" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <p >
+                    <img src="/static/imagenes/login1.jpg" class="img-responsive img-circle center-box"  width="70px" height="50px"  alt="Biblioteca"  >
+                </p>
+            
+              
+            </ul>
+
+          </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+      </nav>
+    <!--header-->
+    <div class="container-fluid">
+    <!--documents-->
+        <div class="row row-offcanvas row-offcanvas-left">
+          <div class="col-xs-6 col-sm-3 sidebar-offcanvas" role="navigation">
+            <ul class="list-group panel">
+                
+                <li class="list-group-item"><i class="glyphicon glyphicon-list-alt"></i> <b></b>SISTEMA INVENTARIO</li>
+                <li class="list-group-item"><a href="{% url 'listar_venta' %}"><i class="glyphicon glyphicon-home"></i>inicio </a></li>
+                <li class="list-group-item"><a href="{% url 'listar_categoria' %}"><i class="glyphicon glyphicon-list-alt"></i>Categoria</a></li>
+                <li class="list-group-item"><a href="{% url 'listar_cliente' %}"><i class="glyphicon glyphicon-th-list"></i>Cliente</a></li>
+                <li class="list-group-item"><a href="{% url 'listar_proveedor' %}"><i class="glyphicon glyphicon-list-alt"></i>Proveedor</a></li>
+                <li class="list-group-item"><a href="{% url 'listar_producto' %}"><i class="glyphicon glyphicon-list-alt"></i>Producto</a></li>                
+                <li class="list-group-item"><a href="{% url 'listar_compra' %}"><i class="glyphicon glyphicon-list-alt"></i>Compra</a></li>
+                <li class="list-group-item"><a href="{% url 'listar_venta' %}"><i class="glyphicon glyphicon-certificate"></i>Ventas</a></li>
+                <li class="list-group-item"><a href="{% url 'vista_logout' %}"><i class="glyphicon glyphicon-lock"></i>Salir</a></li>
+              </ul>
+          </div>
+          <div class="col-xs-12 col-sm-9 content">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h3 class="panel-title"><a href="javascript:void(0);" class="toggle-sidebar"><span class="fa fa-angle-double-left" data-toggle="offcanvas" title="Maximize Panel"></span></a></h3>
+              </div>
+
+              <div class="panel-body">
+                {% block body %}
+
+                  <div class="content-row">
+                    <h2 class="content-row-title">Color Swatches
+                      <span>(<b>More Colors See</b>: <a href="colors.html">Flat UI Color Picker</a>)</span>
+                    </h2>
+                 
+                   
+                  </div>
+
+                 
+                  {% endblock body %}
+                  
+                
+                
+              </div><!-- panel body -->
+            </div>
+        </div><!-- content -->
+      </div>
+    </div>
+    
+  </body>
+  {% block extrajs %}
+  {% endblock extrajs %}
+  <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.25/datatables.min.js"></script>
+  <script>
+    $(document).ready( function () {
+        $('#datatable').DataTable( {
+          "aLengthMenu": [[5, 10, 15, -1], [5, 10, 15, "All"]],
+          "language": {
+            "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json",
+            "lengthMenu": "Mostrar MENU ",
+            "zeroRecords": "Registro no encontrado",
+            "info": "Mostrando página PAGE de PAGES",
+            "infoEmpty": "No hay registros disponibles",
+            "infoFiltered": "(filtered from MAX registros totales)",
+            "pagingType": "full_numbers",
+            "search": "Buscar:",            
+          }
+      } );
+    } );
+  </script>
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+</html>

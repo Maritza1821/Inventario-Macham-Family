@@ -1,0 +1,16 @@
+{% extends 'inicio/vista_principal.html' %}
+{% block titulo %}
+Confirmar Eliminacion
+{% endblock titulo %}
+{% block body %}
+<form method="POST" >
+    {% csrf_token %}
+    <p><strong>Desea eliminar el proveedor</strong></p>
+    <br>
+    <h3>{{ object.nombre }} </h3>
+    <br>
+    <button class="btn btn-danger" type="submit">Confirmar</button>
+    <a href="{% url 'listar_proveedor' %}">Cancelar</a>
+</form>
+
+{% endblock body %}

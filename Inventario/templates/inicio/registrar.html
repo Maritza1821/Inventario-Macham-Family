@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="container">
+        <br>
+        <h2 class="center">NUEVO </h2>
+        <form method="POST" action="">
+            {% csrf_token %}
+
+            {{form.as_p}}  
+            <br>
+            <div class="d-flex justify-content-start">
+                <br>
+                <button class=" btn btn-outline-primary btn-flat" type="submit"><i class=" fas fa-save "></i>
+                    Guardar</button>
+                &nbsp;
+
+             
+                <a href="/login/"  class="btn btn-outline-danger btn-flat"><i
+                    class="fas fa-times"></i> Cancelar</a>
+
+        </form>
+    </div>
+</body>
+</html>

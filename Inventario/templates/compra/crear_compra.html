@@ -1,0 +1,18 @@
+<div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+        <h2 class="modal-header ">Creacion de Compra</h2>
+        <button class="close" type="button" data-dismiss="modal" aria-label="close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <form action="{% url 'crear_compra' %}" method="POST">
+            {% csrf_token %}
+            <div class="modal-body">
+                {{ form.as_p }}
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" type="submit">Confirmar</button>
+                <button class="btn btn-danger" type="button" data-dismiss="modal">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
