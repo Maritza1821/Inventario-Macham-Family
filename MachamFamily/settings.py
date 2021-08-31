@@ -31,6 +31,10 @@ ALLOWED_HOSTS = ["*"]
 # MESSAGE_STORAGE= "django.contrib.messages.cookie.CookieStorage"
 
 
+DATABASE_URL = os.environ['DATABASE_URL']
+conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+DATABASES = {}
+DATABASES['default'] = dj_database_url.config(conn_max_age=600)
 
 # Application definition
 REST_FRAMEWORK = {
@@ -94,7 +98,6 @@ WSGI_APPLICATION = 'MachamFamily.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-
 
 ''' DATABASES = {
     'default': {
