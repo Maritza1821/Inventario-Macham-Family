@@ -333,7 +333,7 @@ class ProveedorForm(forms.ModelForm):
 
         }
 class ProductoForm(forms.ModelForm):
-    foto_producto = forms.ImageField(required=False)
+    
     class Meta:
         model = Producto
         fields = ['codigo','nombre','descripcion','existencia','foto_producto','precio','fk_categoria','fk_proveedor']
@@ -378,7 +378,15 @@ class ProductoForm(forms.ModelForm):
                     'id' : 'existencia'
                 }
             ),
-        
+            'foto_producto' : forms.FileInput(
+                attrs = {
+                    "type":"file",
+                    'class' : 'form-control',
+                    'placeholder' : 'Existencia',
+                    'id' : 'existencia'
+                }
+            ),
+
               'precio' : forms.TextInput(
                 attrs = {
                     "type":"number",

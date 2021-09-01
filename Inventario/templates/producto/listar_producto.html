@@ -2,11 +2,19 @@
 {% block titulo %}Lista Productos{% endblock titulo %}
 {% block body %}
 
-<div>
+
+
+
+                    {% if user.last_name == "cliente" %}
+                
+                {% else %}
+                <div>
     <button class="btn btn-primary" type="button"onclick="abrir_modal_creacion('{% url 'crear_producto' %}')">
         Nuevo Producto
     </button>
 </div>
+                {% endif %}
+
 <br>
 <div class="card">
     <div class="card-header">
@@ -23,8 +31,14 @@
                     <th>Foto</th>
                     <th>Precio</th>
                     <th>Categoria</th>
-                    <th>Proveedor</th>
-                    <th>Opciones</th>
+                 
+                    {% if user.last_name == "cliente" %}
+                
+                {% else %}
+                   <th>Proveedor</th>
+                  <th>Opciones</th>
+                {% endif %}
+                  
 
                 </tr>
             </thead>
@@ -44,13 +58,18 @@
                     </td>
                     <td>{{p.precio }}</td>
                     <td>{{p.fk_categoria }}</td>
-                    <td>{{p.fk_proveedor  }}</td>
-                <td>
+                 
+                {% if user.last_name == "cliente" %}
+                
+                {% else %}
+                   <td>{{p.fk_proveedor  }}</td>
+                  <td>
                         <button class="btn btn-primary"onclick="abrir_modal_edicion('{% url 'editar_producto' p.id %}')">
                             Editar
                         </button>
                         <a href="#"onclick="eliminarproducto({{ p.id }})" class="btn btn-danger"> Eliminar </a>
                 </td>
+                {% endif %}
                 </tr>
                 {% endfor %}
             </tbody>

@@ -31,10 +31,6 @@ ALLOWED_HOSTS = ["*"]
 # MESSAGE_STORAGE= "django.contrib.messages.cookie.CookieStorage"
 
 
-DATABASE_URL = os.environ['DATABASE_URL']
-conn = psycopg2.connect(DATABASE_URL, sslmode='require')
-DATABASES = {}
-DATABASES['default'] = dj_database_url.config(conn_max_age=600)
 
 # Application definition
 REST_FRAMEWORK = {
@@ -65,7 +61,6 @@ CORS_ALLOW_CREDENTIALS = True
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -76,7 +71,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'MachamFamily.urls'
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -98,13 +93,16 @@ WSGI_APPLICATION = 'MachamFamily.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-
-''' DATABASES = {
+DATABASE_URL = os.environ['DATABASE_URL']
+conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+DATABASES = {}
+DATABASES['default'] = dj_database_url.config(conn_max_age=600)
+""" DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
-} '''
+} """
 
 
 # Password validation
@@ -146,7 +144,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, '/media/') # 'data' is my media folder
 MEDIA_URL = '/media/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'saticfiles')
 STATIC_URL = '/static/'
-
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )

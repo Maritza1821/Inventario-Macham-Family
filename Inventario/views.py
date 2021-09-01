@@ -65,8 +65,9 @@ def registro(request):
         form = ClientesForm(data=request.POST)
         if form.is_valid():
             form.save()
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
+            username = request.POST.get('username',"")
+            password = request.POST.get('password',"")
+            user=User.objects.create_user(username=username,password=password,last_name="cliente",email=request.POST.get('email',""))
             usuario = authenticate(username=username,password=password)
             login(request, usuario)
             messages.success(request, "Te has registrado correctamente")
@@ -76,6 +77,23 @@ def registro(request):
         data["form"] = form
 
     return render(request, 'inicio/registrar.html', data)
+def perfil(request):
+    user=request.user
+    cliente=Cliente.objects.get(cedula=user.username)
+    data = {
+        'form' : ClientesForm(instance=cliente)
+    }
+    if request.method == 'POST':
+        form = ClientesForm(data=request.POST,instance=cliente)
+        if form.is_valid():
+            form.save()            
+            messages.success(request, "Te has registrado correctamente")
+            return redirect('/perfil/')
+        else:
+            print(form)
+        data["form"] = form
+
+    return render(request, 'inicio/perfil.html', data)
 # def registrar_view(request):
 #     info = "inicializar"
 #     if request.method == 'POST':

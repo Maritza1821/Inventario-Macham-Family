@@ -27,7 +27,8 @@ urlpatterns = [
     path('login/', login_view, name="vista_login"),
     path('inicio/', inicio_view, name="vista_inicio"),
     path('logout/', logout_view, name="vista_logout"), 
-    path('registrar', registro, name='registrar'),
+    path('registrar/', registro, name='registrar'),
+    path('perfil/', perfil, name='perfil'),
 
     path('lista_categoria/', login_required(ListadoCategoria.as_view()), name ='listar_categoria'),
     path('crear_categoria/', login_required(CrearCategoria.as_view()), name = 'crear_categoria'),

@@ -4,17 +4,27 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+      <link rel="stylesheet" href="/static/inicio/dist/css/site.min.css">
+    <link rel="stylesheet" href="/static/css/main.css">
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,800,700,400italic,600italic,700italic,800italic,300italic" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.25/datatables.min.css"/>
+
+    <script type="text/javascript" src="/static/inicio/dist/js/site.min.js"></script>
+    <title>Registra</title>
 </head>
 <body>
     <div class="container">
         <br>
         <h2 class="center">NUEVO </h2>
         <form method="POST" action="">
-            {% csrf_token %}
 
+            {% csrf_token %}
             {{form.as_p}}  
-            <br>
+         
+            <label for="username" name="username">Usuario</label>
+            <input class="form-control" name="username" id="username" placeholder="Usuario"/>
+            <label for="password" name="username">Contraseña</label>
+            <input class="form-control" name="password" id="password" placeholder="Contraseña" />
             <div class="d-flex justify-content-start">
                 <br>
                 <button class=" btn btn-outline-primary btn-flat" type="submit"><i class=" fas fa-save "></i>

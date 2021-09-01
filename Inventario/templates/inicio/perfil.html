@@ -1,0 +1,32 @@
+{% extends './inicio.html' %}
+{% block titulo %}Datos Cliente{% endblock titulo %}
+{% block body %}
+
+<div class="card">
+    <div class="card-header">
+        <strong class="card-title">Datos Perfil</strong>
+    </div>
+   <div class="container">
+        <br>
+     
+        <form method="POST" action="">
+
+            {% csrf_token %}
+            {{form.as_p}}  
+         
+           
+            <div class="d-flex justify-content-start">
+                <br>
+                <button class=" btn btn-outline-primary btn-flat" type="submit"><i class=" fas fa-save "></i>
+                    Guardar</button>
+                &nbsp;
+
+             
+               
+
+        </form>
+    </div>
+</div>
+
+
+{% endblock body %}
