@@ -77,16 +77,21 @@ def registro(request):
         data["form"] = form
 
     return render(request, 'inicio/registrar.html', data)
+
+
 def perfil(request):
     user=request.user
     cliente=Cliente.objects.get(cedula=user.username)
+    user_modifi=Cliente.objects.get(id=user.id)
     data = {
         'form' : ClientesForm(instance=cliente)
     }
     if request.method == 'POST':
         form = ClientesForm(data=request.POST,instance=cliente)
         if form.is_valid():
-            form.save()            
+            form.save()      
+            user_modifi.username = form.cleaned_data["cedula"]
+            user_modifi.save()
             messages.success(request, "Te has registrado correctamente")
             return redirect('/perfil/')
         else:
