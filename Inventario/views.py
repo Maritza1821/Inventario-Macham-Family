@@ -92,7 +92,7 @@ def perfil(request):
             form.save()      
             user_modifi.first_name = form.cleaned_data["cedula"]
             user_modifi.save()
-            messages.success(request, "Te has registrado correctamente")
+            messages.success(request, "Se han actualizado los datos correctamente")
             return redirect('/perfil/')
         else:
             print(form)
