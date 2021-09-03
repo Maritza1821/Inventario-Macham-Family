@@ -67,7 +67,7 @@ def registro(request):
             form.save()
             username = request.POST.get('username',"")
             password = request.POST.get('password',"")
-            user=User.objects.create_user(username=username,password=password,last_name="cliente",email=request.POST.get('email',""))
+            user=User.objects.create_user(username=username,password=password,first_name=request.POST.get('cedula'),last_name="cliente",email=request.POST.get('email',""))
             usuario = authenticate(username=username,password=password)
             login(request, usuario)
             messages.success(request, "Te has registrado correctamente")
@@ -81,7 +81,7 @@ def registro(request):
 
 def perfil(request):
     user=request.user
-    cliente=Cliente.objects.get(cedula=user.username)
+    cliente=Cliente.objects.get(cedula=user.first_name)
     user_modifi=User.objects.get(id=user.id)
     data = {
         'form' : ClientesForm(instance=cliente)
@@ -192,6 +192,8 @@ class ActualizarCliente(MixinFormInvalid,UpdateView,SuccessMessageMixin):
         
 def eliminar_cliente(request, id):
     cliente = get_object_or_404(Cliente, id=id)
+    user=User.objects.get(first_name=cliente["cedula"])
+    user.delete()
     cliente.delete()
     messages.success(request, "eliminado correctamente!")
     return redirect(to="listar_cliente")
