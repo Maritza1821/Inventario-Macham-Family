@@ -172,7 +172,7 @@
         console.log("dsanfk")
         var search = $('#countryId').val();
         console
-       let responsePro = await fetch('http://inventario-machamfamily.herokuapp.com/api/producto/?nombre=' + search)
+       let responsePro = await fetch('https://inventario-machamfamily.herokuapp.com/api/producto/?nombre=' + search)
         responsePro = await responsePro.json()
         console.log(responsePro)
         if(search.length ===0){
@@ -256,7 +256,7 @@
                     console.log(xhr)
                 if(xhr.status==200){
                      let n_venta= $("#n_venta").val()
-                    let responseVenta = await fetch('http://inventario-machamfamily.herokuapp.com/api/venta/?n_venta=' + n_venta)
+                    let responseVenta = await fetch('https://inventario-machamfamily.herokuapp.com/api/venta/?n_venta=' + n_venta)
                     responseVenta = await responseVenta.json()
                     let id_venta=responseVenta[0].id;
                     let listaSave=listaP.filter(item=>{
@@ -265,7 +265,7 @@
                         return item;
                     })
                     console.log(listaSave)
-                    let resuls = await fetch("http://inventario-machamfamily.herokuapp.com/api/detallesventa/", {
+                    let resuls = await fetch("https://inventario-machamfamily.herokuapp.com/api/detallesventa/", {
                         method: "POST",
                         credentials: "same-origin",
                         headers: {
