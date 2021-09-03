@@ -90,7 +90,7 @@ def perfil(request):
         form = ClientesForm(data=request.POST,instance=cliente)
         if form.is_valid():
             form.save()      
-            user_modifi.username = form.cleaned_data["cedula"]
+            user_modifi.first_name = form.cleaned_data["cedula"]
             user_modifi.save()
             messages.success(request, "Te has registrado correctamente")
             return redirect('/perfil/')
