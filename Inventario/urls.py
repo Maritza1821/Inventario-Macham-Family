@@ -12,6 +12,6 @@ router.register('api/compra',CompraViewset)
 router.register('api/venta',VentaViewset)
 router.register('api/detallesventa',DetallesViewset)
 router.register('api/detallesventaalter',DetallesViewsetAlter)
-# router.register('api/perfiles',PerfilViewset)
+
 
 urlpatterns = router.urls

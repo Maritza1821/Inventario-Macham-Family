@@ -267,15 +267,7 @@ class ActualizarProducto(MixinFormInvalid,UpdateView,SuccessMessageMixin):
     template_name = 'producto/editar_producto.html'
     success_url = reverse_lazy('listar_producto')
     success_message ="Usuario Actualizadoo corectamente"    
-''' 
-class EliminarProducto(DeleteView):
-    model = Producto   
-    template_name = 'producto/producto_confirm_delete.html'
-    def post(self, request, pk, *args, **kwargs):
-        object = Producto.objects.get(id=pk)
-        object.estado = False
-        object.save()
-        return redirect('listar_producto') '''
+
         
 def eliminar_producto(request, id):
     producto = get_object_or_404(Producto, id=id)

@@ -51,9 +51,7 @@ INSTALLED_APPS = [
     'import_export',
     "corsheaders",
     "rest_framework.authtoken",
-    "django_filters"
-    
-   
+    "django_filters"   
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True # If this is used then `CORS_ALLOWED_ORIGINS` will not have any effect
