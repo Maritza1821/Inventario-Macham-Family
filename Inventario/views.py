@@ -70,7 +70,7 @@ def registro(request):
             user=User.objects.create_user(username=username,password=password,first_name=request.POST.get('cedula'),last_name="cliente",email=request.POST.get('email',""))
             usuario = authenticate(username=username,password=password)
             login(request, usuario)
-            messages.success(request, "Te has registrado correctamente")
+            messages.success(request, "Se actualizo correctamente")
             return redirect('/inicio/')
         else:
             print(form)
