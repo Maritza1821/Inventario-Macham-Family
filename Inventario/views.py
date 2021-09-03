@@ -82,7 +82,7 @@ def registro(request):
 def perfil(request):
     user=request.user
     cliente=Cliente.objects.get(cedula=user.username)
-    user_modifi=Cliente.objects.get(id=user.id)
+    user_modifi=User.objects.get(id=user.id)
     data = {
         'form' : ClientesForm(instance=cliente)
     }

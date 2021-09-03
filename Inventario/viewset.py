@@ -108,7 +108,7 @@ class ProductoViewset(viewsets.ModelViewSet,generics.ListAPIView):
         nombre = self.request.query_params.get('nombre')
         print(nombre)
         if nombre is not None:
-            queryset = queryset.filter(nombre__contains=nombre)
+            queryset = queryset.filter(nombre__icontains=nombre)
             return queryset
         return queryset
 
