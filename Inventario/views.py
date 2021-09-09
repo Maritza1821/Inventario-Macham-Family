@@ -200,8 +200,12 @@ class ActualizarCliente(MixinFormInvalid,UpdateView,SuccessMessageMixin):
         
 def eliminar_cliente(request, id):
     cliente = get_object_or_404(Cliente, id=id)
-    user=User.objects.get(first_name=cliente["cedula"])
-    user.delete()
+   
+    try:
+        user=User.objects.get(first_name=cliente.cedula)
+        user.delete()
+    except User.DoesNotExist:
+        pass
     cliente.delete()
     messages.success(request, "eliminado correctamente!")
     return redirect(to="listar_cliente")
