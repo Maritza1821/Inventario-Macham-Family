@@ -91,16 +91,16 @@ WSGI_APPLICATION = 'MachamFamily.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-DATABASE_URL = os.environ['DATABASE_URL']
+""" DATABASE_URL = os.environ['DATABASE_URL']
 conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 DATABASES = {}
-DATABASES['default'] = dj_database_url.config(conn_max_age=600)
-""" DATABASES = {
+DATABASES['default'] = dj_database_url.config(conn_max_age=600) """
+DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
-} """
+}
 
 
 # Password validation
@@ -138,8 +138,8 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
-MEDIA_ROOT = os.path.join(BASE_DIR, '/media/') # 'data' is my media folder
 MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 STATIC_ROOT = os.path.join(BASE_DIR, 'saticfiles')
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (

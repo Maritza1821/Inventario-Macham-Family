@@ -49,6 +49,7 @@ class CustomUserCreationForm(UserCreationForm):
         }
 
 class ClientesForm(forms.ModelForm):
+    
     class Meta:
         
         model = Cliente
@@ -67,7 +68,8 @@ class ClientesForm(forms.ModelForm):
                     "type":"number",
                     'class' : 'form-control',
                     'placeholder' : 'Cedula',
-                    'id' : 'cedula'
+                    'id' : 'cedula',
+                    'maxlength': '10',
                 }
             ),
             'nombre' : forms.TextInput(
@@ -91,14 +93,16 @@ class ClientesForm(forms.ModelForm):
                     'id' : 'direccion'
                 }
             ),
-            'celular' : forms.TextInput(
+            'celular' : forms.NumberInput(
                 attrs = {
-                        "type":"number",
                     'class' : 'form-control',
                     'placeholder' : 'Celular',
-                    'id' : 'celular'
+                    'id' : 'celular',
+                    "size":"10",
+                    'oninput': 'limit_input()'
                 }
             ),
+           
             'email': forms.EmailInput(
                 attrs={
                     'class': 'form-control', 

@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <link rel="stylesheet" href="/static/inicio/dist/css/site.min.css">
     <link rel="stylesheet" href="/static/css/main.css">
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,800,700,400italic,600italic,700italic,800italic,300italic" rel="stylesheet" type="text/css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.25/datatables.min.css"/>
 
@@ -39,3 +40,74 @@
     </div>
 </body>
 </html>
+
+
+
+<script>
+       
+    $(function(){
+        function messageError(text){
+            Swal.fire({
+            title:'ERRROR',
+            html: '<pre style="text-align: initial !important;">' + text + '</pre>',
+            icon:'error',
+            confirmButtonColor:'#d33',
+            confirmButtonText:'Aceptar'
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+              location.reload();
+            } else if (result.isDenied) {
+              
+            }
+          })
+    
+    }
+        var url=$("form").attr("action")
+        var token=$("[name=csrfmiddlewaretoken]").val()
+
+        $("form").submit(function(e){
+            e.preventDefault()
+            let formdata=$("form").serializeArray()
+            console.log(formdata)
+            $.ajax({
+                method: "POST",
+                url: url,
+                data: formdata,
+                headers:{'X-CSRFToken':token},
+                }).done(function(r,textStatus,xhr){
+                    console.log(r)
+                    console.log(textStatus)
+                    console.log(xhr)
+                if(xhr.status==200){
+                    location.href=location.protocol+"//"+location.host+"/inicio/";
+                }else{
+                    console.log("text",textStatus)
+                    messageError(textStatus);
+                }
+               
+            }).fail(function(error){               
+                let ar=JSON.parse(error.responseText)              
+                console.log(ar)               
+                let obe = Object.values(ar);
+             
+                let mensaje=""
+                for (var k in obe) {
+                    if ((Number(k) + 1) === obe.length) {
+                        mensaje+="- "+obe[k][0]
+                    }else{
+                    mensaje+= "- "+obe[k][0]+"\n"
+
+                    }
+                    
+                }
+                
+               
+                 messageError(mensaje)
+                
+            });
+        })
+    })
+
+     
+</script>

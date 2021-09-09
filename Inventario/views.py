@@ -67,13 +67,21 @@ def registro(request):
             form.save()
             username = request.POST.get('username',"")
             password = request.POST.get('password',"")
-            user=User.objects.create_user(username=username,password=password,first_name=request.POST.get('cedula'),last_name="cliente",email=request.POST.get('email',""))
-            usuario = authenticate(username=username,password=password)
-            login(request, usuario)
-            messages.success(request, "Se actualizo correctamente")
-            return redirect('/inicio/')
+            
+            if User.objects.filter(username = username).first():
+                if request.is_ajax():
+                    return JsonResponse({'message' : 'Ya existe un usuario con ese nombre'}, status=400)                
+            else:  
+                user=User.objects.create_user(username=username,password=password,first_name=request.POST.get('cedula'),last_name="cliente",email=request.POST.get('email',""))
+                usuario = authenticate(username=username,password=password)
+            
+                login(request, usuario)
+                messages.success(request, "Se actualizo correctamente")
+                return redirect('/inicio/')
         else:
-            print(form)
+            if request.is_ajax():
+                return JsonResponse(form.errors, status=400)
+            
         data["form"] = form
 
     return render(request, 'inicio/registrar.html', data)

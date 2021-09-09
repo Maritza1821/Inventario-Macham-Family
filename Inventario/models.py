@@ -4,7 +4,6 @@ from django.utils.safestring import mark_safe
 from django.contrib.auth.models import AbstractUser, User
 from datetime import datetime
  
-
 class Categoria(models.Model):    
     nombre = models.CharField(max_length=50) 
     estado = models.BooleanField('Estado', default=True)
@@ -56,20 +55,23 @@ class Proveedor(models.Model):
         ordering = ['id'] 
 
 def url_producto(self, filename):
-    ruta = "static/img/Productos/%s/%s"%(self.foto_producto, str(filename))
+    ruta = "media/img/Productos/%s/%s"%(self.foto_producto, str(filename))
     return ruta
 class Producto(models.Model): 
     codigo = models.CharField(max_length=20,unique=True,blank=False,null=False)
     nombre = models.CharField(max_length=20)
     descripcion = models.CharField(max_length=30)
     existencia = models.IntegerField()
-    foto_producto = models.ImageField(upload_to="static/img/Productos/",blank=True)
+    foto_producto = models.ImageField(upload_to=url_producto,blank=True)
     precio = models.DecimalField(default=0.00,max_digits=8,decimal_places=2)
     fk_categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE, blank=False)
     fk_proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE, blank=False)
     estado = models.BooleanField('Estado', default=True)
     
+    def foto_producto1(self):
+        return mark_safe('<a href="/media/%s" target="_blank"> <img src="/media/%s" hight="50px" width="50px"/> </a>'%(self.foto_producto, self.foto_producto))
     
+    foto_producto1.allow_tags = True
 
     def toJSON(self):
         item = model_to_dict(self)
