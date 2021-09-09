@@ -24,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'd3d!6r00ijd%k14((cos3yx^@*#90qcz3k)=3+v85*g5@j_8ok'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["*"]
 # MESSAGE_STORAGE= "django.contrib.messages.storage.SessionStorage"
@@ -91,7 +91,10 @@ WSGI_APPLICATION = 'MachamFamily.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-
+DATABASE_URL = os.environ['DATABASE_URL']
+conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+DATABASES = {}
+DATABASES['default'] = dj_database_url.config(conn_max_age=600)
 ''' DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
