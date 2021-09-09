@@ -63,9 +63,9 @@
             <ul class="list-group panel">
                 
               {% if user.last_name == "cliente" %}
-                <li class="list-group-item"><a href="{% url 'listar_producto' %}"><i class="glyphicon glyphicon-list-alt"></i>Producto</a></li>                
-                <li class="list-group-item"><a href="{% url 'perfil' %}"><i class="glyphicon glyphicon-list-alt"></i>Perfil</a></li>                
-                <li class="list-group-item"><a href="{% url 'vista_logout' %}"><i class="glyphicon glyphicon-lock"></i>Salir</a></li>
+                <li class="list-group-item"><a href="{% url 'listar_producto' %}"><i class="glyphicon glyphicon-qrcode btn-lg"></i>Producto</a></li>                
+                <li class="list-group-item"><a href="{% url 'perfil' %}"><i class="glyphicon glyphicon-user btn-lg"></i>Perfil</a></li>                
+                <li class="list-group-item"><a href="{% url 'vista_logout' %}"><i class="glyphicon glyphicon-remove btn-lg"></i>Salir</a></li>
               
               {% else %}
                 <li class="list-group-item"> <b></b>SISTEMA INVENTARIO</li>
