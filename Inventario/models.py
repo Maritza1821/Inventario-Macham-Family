@@ -21,7 +21,7 @@ class Cliente(models.Model):
     nombre = models.CharField(max_length=50)
     apellido = models.CharField(max_length=50)
     direccion = models.CharField(max_length=100)
-    celular = models.IntegerField()
+    celular = models.CharField(max_length=10)
     email = models.EmailField(unique=True)
     estado = models.BooleanField('Estado', default=True)  
     
@@ -90,7 +90,7 @@ class Producto(models.Model):
         ordering = ['id']
 
 class Compra(models.Model): 
-    n_compra = models.IntegerField()
+    n_compra = models.CharField(max_length=100,unique=True)
     fk_producto = models.ForeignKey(Producto, on_delete=models.CASCADE, blank=False)
     fk_proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE, blank=False)
     fecha = models.DateField(default= datetime.now)
@@ -105,7 +105,7 @@ class Compra(models.Model):
         ordering = ['id']
         
 class Venta(models.Model):
-    n_venta = models.IntegerField(unique=True)
+    n_venta = models.CharField(unique=True, max_length=100)
     fk_cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE, blank=False)
     fecha = models.DateField(default= datetime.now)
     subtotal = models.DecimalField(default=0.00,max_digits=8,decimal_places=2)

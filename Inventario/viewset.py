@@ -116,6 +116,21 @@ class CompraViewset(viewsets.ModelViewSet,generics.ListAPIView):
     queryset = Compra.objects.all()
     serializer_class = CompraSerializer
 
+    def create(self, request, *args, **kwargs):  
+        
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        producto_id=request.data["fk_producto"]
+        cantidad=request.data["fk_producto"]
+        producto=Producto.objects.get(id=producto_id)
+        producto.existencia=int(producto.existencia)+int(cantidad)
+        producto.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+  
+
 class VentaViewset(viewsets.ModelViewSet,generics.ListAPIView):
     queryset = Venta.objects.all()
     serializer_class = VentaSerializer
@@ -127,7 +142,6 @@ class VentaViewset(viewsets.ModelViewSet,generics.ListAPIView):
         """
         queryset = Venta.objects.all()
         n_venta = self.request.query_params.get('n_venta')
-        print(n_venta)
         if n_venta is not None:
             queryset = queryset.filter(n_venta=n_venta)
             return queryset
@@ -144,7 +158,7 @@ class DetallesViewset(viewsets.ModelViewSet,generics.ListAPIView):
         """
         queryset = DetalleVenta.objects.all()
         fk_venta = self.request.query_params.get('fk_venta')
-        print(fk_venta)
+       
         if fk_venta is not None:
             queryset = queryset.filter(fk_venta=fk_venta)
             return queryset
@@ -153,10 +167,14 @@ class DetallesViewset(viewsets.ModelViewSet,generics.ListAPIView):
     def create(self, request, *args, **kwargs):
       
         for row in request.data:  
-            print(row)     
             serializer = self.get_serializer(data=row)
             serializer.is_valid(raise_exception=True)
             self.perform_create(serializer)
+            id_producto=row["fk_producto"]
+            cantidad_producto=row["cantidad"]
+            producto=Producto.objects.get(id=id_producto)
+            producto.existencia=int(producto.existencia)-int(cantidad_producto)
+            producto.save()
         headers = self.get_success_headers(request.data)
         return Response(request.data, status=status.HTTP_201_CREATED, headers=headers)
 
@@ -171,17 +189,16 @@ class DetallesViewsetAlter(viewsets.ModelViewSet,generics.ListAPIView):
         """
         queryset = DetalleVenta.objects.all()
         fk_venta = self.request.query_params.get('fk_venta')
-        print(fk_venta)
+      
         if fk_venta is not None:
             queryset = queryset.filter(fk_venta=fk_venta)
             return queryset
         return queryset
 
     def create(self, request, *args, **kwargs):      
-        for row in request.data:  
-            print(row)     
+        for row in request.data:       
             serializer = self.get_serializer(data=row)
-            serializer.is_valid(raise_exception=True)
+            serializer.is_valid(raise_exception=True)          
             self.perform_create(serializer)
         headers = self.get_success_headers(request.data)
         return Response(request.data, status=status.HTTP_201_CREATED, headers=headers)

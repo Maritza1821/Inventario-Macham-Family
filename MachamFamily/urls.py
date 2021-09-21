@@ -61,6 +61,9 @@ urlpatterns = [
     path('eliminar_venta/<id>/', eliminar_venta, name = 'eliminar_venta'),
 
     path('ajax_load_project/', ajax_load_project, name='ajax_load_project'),
+
+    path('reporte_excel_inventario/',ReporteproductoExcel.as_view(),name='reporte_excel_inventario'),
+    path('pdf_factura/<id>',pdfFactura,name='pdf_factura'),
     
 ] 
 

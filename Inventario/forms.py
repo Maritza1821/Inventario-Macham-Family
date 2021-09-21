@@ -160,10 +160,11 @@ class ClienteUpdaForm(forms.ModelForm):
             ),
             'celular' : forms.TextInput(
                 attrs = {
-                        "type":"number",
-                    'class' : 'form-control',
+                     'class' : 'form-control',
                     'placeholder' : 'Celular',
-                    'id' : 'celular'
+                    'id' : 'celular',
+                    "size":"10",
+                    'oninput': 'limit_input()'
                 }
             ),
             'email': forms.EmailInput(
@@ -281,10 +282,11 @@ class ClienteUpdateForm(forms.ModelForm):
             ),
             'celular' : forms.TextInput(
                 attrs = {
-                        "type":"number",
-                    'class' : 'form-control',
+                       'class' : 'form-control',
                     'placeholder' : 'Celular',
-                    'id' : 'celular'
+                    'id' : 'celular',
+                    "size":"10",
+                    'oninput': 'limit_input()'
                 }
             ),
             'email': forms.EmailInput(
@@ -418,7 +420,7 @@ class ProductoForm(forms.ModelForm):
 class CompraForm(forms.ModelForm):
     class Meta:
         model = Compra
-        fields = ['n_compra','fk_producto','fk_proveedor','fecha','cantidad','precio']
+        fields = ["id",'n_compra','fk_producto','fk_proveedor','fecha','cantidad','precio']
         labels = {
             'n_compra' : 'Ingrese el numero de compra', 
             'fk_producto' : 'Ingrese el producto',  
@@ -433,6 +435,7 @@ class CompraForm(forms.ModelForm):
                      "type":"number",
                     'class' : 'form-control',
                     'placeholder' : 'Compra Nro',
+                    "value":"",
                     'id' : 'compra'
                 }
             ),
@@ -468,6 +471,19 @@ class CompraForm(forms.ModelForm):
                 }
             )
         }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        producto=cleaned_data.get("fk_producto")
+        cantidad=cleaned_data.get("cantidad")
+        compra_anterior=cleaned_data
+        
+        produto_add=Producto.objects.get(id=producto.id)
+        produto_add.existencia=produto_add.existencia + cantidad;
+        produto_add.save()
+        
+        return cleaned_data
+        
 class VentaForm(forms.ModelForm):
     class Meta:
         model = Venta
@@ -522,6 +538,17 @@ class VentaForm(forms.ModelForm):
                 }
             )
         }
+    """ def clean(self):
+        cleaned_data = super().clean()
+        producto=cleaned_data.get("fk_producto")
+        cantidad=cleaned_data.get("cantidad")
+        compra_anterior=cleaned_data
+        print(compra_anterior)
+        produto_add=Producto.objects.get(id=producto)
+        produto_add.existencia=produto_add.existencia + cantidad;
+        
+        
+        return cleaned_data """
 
 class DetalleVentaForm(forms.ModelForm):
     class Meta:

@@ -40,7 +40,7 @@
             console.log(pat)
     
 async function cargar(){
- let responsePro = await fetch('http://127.0.0.1:8000/api/detallesventaalter/?fk_venta=' + pat)
+ let responsePro = await fetch('https://inventario-machamfamily.herokuapp.com/api/venta/?fk_venta=' + pat)
         responsePro = await responsePro.json()
         console.log(responsePro)
         let lista=[]

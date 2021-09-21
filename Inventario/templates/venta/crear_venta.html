@@ -256,8 +256,11 @@
                     console.log(xhr)
                 if(xhr.status==200){
                      let n_venta= $("#n_venta").val()
+                     console.log(n_venta)
+                    //let responseVenta = await fetch('https://inventario-machamfamily.herokuapp.com/api/venta/?n_venta=' + n_venta)
                     let responseVenta = await fetch('https://inventario-machamfamily.herokuapp.com/api/venta/?n_venta=' + n_venta)
                     responseVenta = await responseVenta.json()
+                    console.log(responseVenta)
                     let id_venta=responseVenta[0].id;
                     let listaSave=listaP.filter(item=>{
                         item.fk_venta=id_venta;
@@ -265,6 +268,7 @@
                         return item;
                     })
                     console.log(listaSave)
+                    //let resuls = await fetch("https://inventario-machamfamily.herokuapp.com/api/detallesventa/", {
                     let resuls = await fetch("https://inventario-machamfamily.herokuapp.com/api/detallesventa/", {
                         method: "POST",
                         credentials: "same-origin",

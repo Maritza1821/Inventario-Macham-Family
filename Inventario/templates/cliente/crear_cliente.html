@@ -17,10 +17,54 @@
     </div>
 </div>
 
-
+<script type="text/javascript">
+    function limit_input() {
+        var field = document.getElementById("celular");
+        var max_length = 10;
+        if (field.value.length > max_length) {
+            field.value = field.value.slice(0, max_length); 
+        }
+    }
+</script>
 <script>
-       
+  
+
     $(function(){
+
+        function validar() {
+        var cad =document.getElementById("cedula").value.trim();
+        var total = 0;
+        var longitud = cad.length;
+        var longcheck = longitud - 1;
+        console.log("llego")
+        console.log(longitud)
+        console.log(cad)
+        if (cad !== "" && longitud === 10){
+          for(i = 0; i < longcheck; i++){
+            if (i%2 === 0) {
+              var aux = cad.charAt(i) * 2;
+              if (aux > 9) aux -= 9;
+              total += aux;
+            } else {
+              total += parseInt(cad.charAt(i)); // parseInt o concatenará en lugar de sumar
+            }
+          }
+
+        console.log("paso")
+          total = total % 10 ? 10 - total % 10 : 0;
+
+          if (cad.charAt(longitud-1) == total) {
+            return true;           
+          }else{
+           
+             messageError("Cedula invalida");
+            return false;
+          }
+        }else{
+            return false;
+           messageError("La cedula es incorrecta");
+        }
+      }
         function messageError(text){
             Swal.fire({
             title:'ERRROR',
@@ -29,13 +73,13 @@
             confirmButtonColor:'#d33',
             confirmButtonText:'Aceptar'
         })}
-        var url=$("form").attr("action")
-        var token=$("[name=csrfmiddlewaretoken]").val()
-
         $("form").submit(function(e){
             e.preventDefault()
+            if(validar() === true){
+           var url=$("form").attr("action")
+           var token=$("[name=csrfmiddlewaretoken]").val()
             let formdata=$("form").serializeArray()
-            console.log(formdata)
+           
             $.ajax({
                 method: "POST",
                 url: url,
@@ -49,7 +93,7 @@
                     location.reload(true);
                 }else{
                     console.log("text",textStatus)
-                    messageError(textStatus);
+                     messageError(textStatus);
                 }
                
             }).fail(function(error){               
@@ -72,7 +116,9 @@
                  messageError(mensaje)
                 
             });
+        }
         })
+     
     })
 
      

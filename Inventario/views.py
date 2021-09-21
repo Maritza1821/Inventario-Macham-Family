@@ -1,7 +1,7 @@
 from django import http
 from django.forms.formsets import formset_factory
 from django.forms.models import inlineformset_factory
-from django.http.response import HttpResponse
+from django.http.response import FileResponse, HttpResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.http import HttpResponseRedirect,HttpResponse,JsonResponse
 from django.contrib.auth.decorators import login_required
@@ -21,8 +21,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 class  MixinFormInvalid:
     def form_invalid(self, form):
         response = super().form_invalid(form)
-        print("entro")
-        print(form)
+       
 
         if self.request.is_ajax():
             return JsonResponse(form.errors, status=400)
@@ -217,6 +216,13 @@ class CrearCompra(MixinFormInvalid,CreateView,SuccessMessageMixin):
     template_name='compra/crear_compra.html'
     success_url = reverse_lazy('listar_compra')
     success_message ="Compra realizada corectamente"    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs) 
+        f = context['form']
+        total=Compra.objects.all().count()
+        f.fields['n_compra'].initial ="00{}".format(total+1);        
+        context['form']=f
+        return context
 
 class ListadoCompra(ListView):
     model = Compra
@@ -242,6 +248,9 @@ class ActualizarCompra(MixinFormInvalid,UpdateView,SuccessMessageMixin):
 #         return redirect('listar_compra')
 def eliminar_compra(request, id):
     compra = get_object_or_404(Compra, id=id)
+    producto=Producto.objects.get(id=compra.fk_producto.id)
+    producto.existencia=int(producto.existencia)-int(compra.cantidad)
+    producto.save()
     compra.delete()
     messages.success(request, "eliminado correctamente!")
     return redirect(to="listar_compra")
@@ -255,7 +264,13 @@ class CrearProducto(CreateView,SuccessMessageMixin):
     success_url = reverse_lazy('listar_producto')
     success_message ="Usuario Actualizadoo corectamente"    
 
-
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs) 
+        f = context['form']
+        total=Producto.objects.all().count()
+        f.fields['codigo'].initial ="00{}".format(total+1);        
+        context['form']=f
+        return context
 
     def form_invalid(self, form):
         response = super().form_invalid(form)
@@ -295,7 +310,8 @@ class CrearProveedor(MixinFormInvalid,CreateView,SuccessMessageMixin):
     form_class =ProveedorForm
     template_name='proveedor/crear_proveedor.html'
     success_url = reverse_lazy('listar_proveedor')
-    success_message ="Usuario creado corectamente"    
+    success_message ="Usuario creado corectamente"
+        
 
 class ListadoProveedor(ListView):
     model = Proveedor
@@ -344,6 +360,13 @@ class CrearVenta(MixinFormInvalid,CreateView,SuccessMessageMixin):
     success_url = reverse_lazy('listar_venta')
     success_message ="Usuario Actualizadoo corectamente"    
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs) 
+        f = context['form']
+        total=Venta.objects.all().count()
+        f.fields['n_venta'].initial ="00{}".format(total+1);        
+        context['form']=f
+        return context
     
         
     
@@ -374,6 +397,13 @@ class ActualizarVenta(MixinFormInvalid,UpdateView, SuccessMessageMixin):
 
 def eliminar_venta(request, id):
     venta = get_object_or_404(Venta, id=id)
+    listaProdustosVenta=DetalleVenta.objects.filter(fk_venta=id)
+    print(listaProdustosVenta)
+    for item in listaProdustosVenta:
+        print(item.cantidad)
+        producto=Producto.objects.get(id=item.fk_producto.id)
+        producto.existencia=int(producto.existencia)+int(item.cantidad)
+        producto.save()
     venta.delete()
     messages.success(request, "eliminado correctamente!")
     return redirect(to="listar_venta")
@@ -389,29 +419,59 @@ class ReporteproductoExcel(TemplateView):
         wb = Workbook()
         ws = wb.active
         ws['B1'] = 'REPORTE DE PRODUCTOS'
-        ws.merge_cells('B1:E1')
+        ws.merge_cells('B1:G1')
         ws['B3'] = 'Codigo'
         ws['C3'] = 'nombre'
         ws['D3'] = 'Descripcion'
         ws['E3'] = 'Existencia'
-        ws['F3'] = 'Foto'
-        ws['G3'] = 'Precio'
-        ws['H3'] = 'Categoria'
-        ws['I3'] = 'Proveedor'
+        ws['F3'] = 'Precio'
+        
+        
         
         cont = 4
         for productos in _producto:
-            ws.cell(row = cont, column = 2).value = productos.producto.codigo
-            ws.cell(row = cont, column = 3).value = productos.producto.nombre
-            ws.cell(row = cont, column = 4).value = productos.producto.descripcion
-            ws.cell(row = cont, column = 5).value = productos.producto.existencia
-            ws.cell(row = cont, column = 6).value = productos.producto.foto_producto1
-            ws.cell(row = cont, column = 7).value = productos.categoria.fk_categoria
-            ws.cell(row = cont, column = 8).value = productos.proveedor.fk_proveedor
+            ws.cell(row = cont, column = 2).value = productos.codigo
+            ws.cell(row = cont, column = 3).value = productos.nombre
+            ws.cell(row = cont, column = 4).value = productos.descripcion
+            ws.cell(row = cont, column = 5).value = productos.existencia            
+            ws.cell(row = cont, column = 6).value = productos.precio            
             cont+=1
-        nombre_archivo = "ReporProductoExcel.xlsx"
+        nombre_archivo = "ReporProductos.xlsx"
         response = HttpResponse(content_type = "application/ms-excel")
         content = "attachment; filename = {0}".format(nombre_archivo)
         response['Content-Disposition'] = content
-        # wb.save(response)
+        wb.save(response)
         return response
+
+
+
+from reportlab.pdfgen import canvas
+import io
+
+from reportlab.lib.utils import ImageReader
+def pdfFactura(request,id):
+    venta=Venta.objects.get(id=id)
+    detalles_vante=DetalleVenta.objects.filter(fk_venta=id)
+    buffer = io.BytesIO()
+  
+    # Create the PDF object, using the buffer as its "file."
+    p = canvas.Canvas(buffer)
+    # Draw things on the PDF. Here's where the PDF generation happens.
+    # See the ReportLab documentation for the full list of functionality.    
+    p.drawString(24, 725, "Empresa:")
+    p.drawString(100, 725, "MachamFamily")
+    p.drawString(24, 700, "Cliente:")
+    p.drawString(100, 700, "")
+    p.drawString(24, 675, "Valor Cancelado:")
+    p.drawString(150, 675, "")
+    p.drawString(24, 650, "Fecha:")
+    p.drawString(100, 650, "")
+  
+    # Close the PDF object cleanly, and we're done.
+    p.showPage()
+    p.save()
+
+    # FileResponse sets the Content-Disposition header so that browsers
+    # present the option to save the file.
+    buffer.seek(0)
+    return FileResponse(buffer, as_attachment=True, filename='Factura.pdf')

@@ -36,9 +36,9 @@
                     <td>{{p.cantidad}}</td>
                     <td>{{p.precio}}</td>
                 <td>
-                        <button class="btn btn-primary"onclick="abrir_modal_edicion('{% url 'editar_compra' p.id %}')">
+                     {% comment %}    <button class="btn btn-primary"onclick="abrir_modal_edicion('{% url 'editar_compra' p.id %}')">
                             Editar
-                        </button>
+                        </button> {% endcomment %}
                         <a href="#"onclick="eliminarcompra({{ p.id }})" class="btn btn-danger"> Eliminar </a>
                 </td>
                 </tr>

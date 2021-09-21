@@ -36,10 +36,11 @@
                     <td>{{p.total}}</td>
                 <td>
                         <button class="btn btn-primary"onclick="abrir_modal_edicion('{% url 'editar_venta' p.id %}')">
-                            Ver Detalles venta
+                            Detalles Venta
                         </button>
                         <a href="#" onclick="eliminarventas({{ p.id }})" class="btn btn-danger"> Eliminar </a>
-                </td>
+                        <!--   <a href="{% url 'pdf_factura' p.id %}" ><i class="fa fa-file-pdf"></i> &nbsp; Factura</a>
+               -->  </td>
                 </tr>
                 {% endfor %}
             </tbody>

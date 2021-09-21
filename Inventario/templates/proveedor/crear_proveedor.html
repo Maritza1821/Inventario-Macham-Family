@@ -22,6 +22,41 @@
 <script>
        
     $(function(){
+
+         function validar() {
+        var cad = $("#cedula").val().trim();
+        var total = 0;
+        var longitud = cad.length;
+        var longcheck = longitud - 1;
+        console.log("llego")
+        console.log(longitud)
+        console.log(cad)
+        if (cad !== "" && longitud === 10){
+          for(i = 0; i < longcheck; i++){
+            if (i%2 === 0) {
+              var aux = cad.charAt(i) * 2;
+              if (aux > 9) aux -= 9;
+              total += aux;
+            } else {
+              total += parseInt(cad.charAt(i)); // parseInt o concatenará en lugar de sumar
+            }
+          }
+
+        console.log("paso")
+          total = total % 10 ? 10 - total % 10 : 0;
+
+          if (cad.charAt(longitud-1) == total) {
+            return true;           
+          }else{
+           
+             messageError("Cedula invalida");
+            return false;
+          }
+        }else{
+           messageError("La cedula es incorrecta");
+           return false;
+        }
+      }
         function messageError(text){
             Swal.fire({
             title:'ERRROR',
@@ -30,11 +65,13 @@
             confirmButtonColor:'#d33',
             confirmButtonText:'Aceptar'
         })}
-        var url=$("form").attr("action")
-        var token=$("[name=csrfmiddlewaretoken]").val()
+     
 
         $("form").submit(function(e){
             e.preventDefault()
+            if(validar() === true){
+                var url=$("form").attr("action")
+                var token=$("[name=csrfmiddlewaretoken]").val()
             let formdata=$("form").serializeArray()
             console.log(formdata)
             $.ajax({
@@ -73,7 +110,9 @@
                  messageError(mensaje)
                 
             });
+            }
         })
+         
     })
 
      
